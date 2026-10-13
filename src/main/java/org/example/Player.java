@@ -8,12 +8,15 @@ public class Player extends GameCharacter {
         this.hasKey = false;
     }
 
-    public void move(int dx, int dy, GameMap gameMap){
+    public boolean move(int dx, int dy, GameMap gameMap, Enemy skeleton){
         int newX = getX() + dx;
         int newY = getY()+ dy;
-        if (gameMap.isWalkable(newX, newY)){
+        boolean enemyBlocking = (newX == skeleton.getX()) && (newY == skeleton.getY()) && (skeleton.isAlive());
+        if (gameMap.isWalkable(newX, newY) && !enemyBlocking){
             setPosition(newX, newY);
+            return true;
         }
+        return false;
     }
 
     public void pickUpKey(){
@@ -22,4 +25,6 @@ public class Player extends GameCharacter {
     public boolean getHasKey(){
         return hasKey;
     }
+
+
 }

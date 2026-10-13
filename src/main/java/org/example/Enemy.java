@@ -6,5 +6,8 @@ public class Enemy extends GameCharacter {
         super(name, health, x, y);
         this.damage = damage;
     }
+    public int getDamage() {
+        return damage;
+    }
 }
 

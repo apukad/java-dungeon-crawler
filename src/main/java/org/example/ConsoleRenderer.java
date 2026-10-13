@@ -13,7 +13,7 @@ public class ConsoleRenderer {
                 if (i==y && j==x){
                     System.out.print("P");
                 }
-                else if (i==ey && j==ex){
+                else if ((i==ey && j==ex) && skeleton.isAlive()){
                     System.out.print("S");
                 }
                 else if(gameMap.getTile(j,i) == 1 ) {
