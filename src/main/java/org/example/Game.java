@@ -5,10 +5,12 @@ import java.util.Scanner;
 public class Game {
     private Player player;
     private GameMap gameMap;
+    private Enemy skeleton;
 
-    public Game(Player player, GameMap gameMap) {
+    public Game(Player player, GameMap gameMap, Enemy skeleton) {
         this.player = player;
         this.gameMap = gameMap;
+        this.skeleton = skeleton;
     }
     public void start() {
 
@@ -16,8 +18,7 @@ public class Game {
         Scanner scanner = new Scanner(System.in);
         String direction = "";
         while (!direction.equals("Q")) {
-            int currentTile = gameMap.getTile(player.getX(),player.getY());
-            renderer.printMap(player, gameMap);
+            renderer.printMap(player, gameMap, skeleton);
             System.out.print("W - Up | A - Left | S - Down | D - Right | Q - Quit: ");
             direction = scanner.nextLine().toUpperCase();
             switch (direction) {
@@ -47,6 +48,7 @@ public class Game {
                     System.out.println("Invalid move");
                 }
             }
+            int currentTile = gameMap.getTile(player.getX(),player.getY());
             if (currentTile == 2) {
                 player.pickUpKey();
                 gameMap.removeKey(player.getX(), player.getY());
