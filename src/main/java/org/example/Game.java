@@ -21,50 +21,11 @@ public class Game {
             renderer.printMap(player, gameMap, skeleton);
             System.out.print("W - Up | A - Left | S - Down | D - Right | F - Attack | Q - Quit: ");
             direction = scanner.nextLine().toUpperCase();
-            boolean playerActed = false;
-            switch (direction) {
-                case "W":{
-                    playerActed = player.move(0,-1, gameMap, skeleton);
-                    break;
-                }
-                case "S":{
-                    playerActed = player.move(0,1, gameMap, skeleton);
-
-                    break;
-                }
-                case "D": {
-                    playerActed = player.move(1,0, gameMap, skeleton);
-                    break;
-                }
-                case "A":{
-                    playerActed = player.move(-1,0, gameMap,skeleton);
-                    break;
-                }
-                case "Q": {
-                    System.out.print("You Exited the game");
-                    return;
-                }
-                case "F": {
-                    if (isEnemyAdjacent() && skeleton.isAlive()) {
-                        skeleton.takeDamage(20);
-                        System.out.println("Skeleton remaining health: "  + skeleton.getHealth());
-                        if (skeleton.getHealth() <= 0) {
-                            System.out.println("You killed the skeleton!");
-                        }
-                        playerActed = true;
-                    }
-                    else if (!skeleton.isAlive()) {
-                        System.out.println("Skeleton is dead");
-                    }
-                    else {
-                        System.out.println("Skeleton too far away!");
-                    }
-                    break;
-                }
-                default:{
-                    System.out.println("Invalid move");
-                }
+            if (direction.equals("Q")) {
+                System.out.println("You Exited the game");
+                return;
             }
+            boolean playerActed = handleAction(direction);
 
             int currentTile = gameMap.getTile(player.getX(),player.getY());
             if (currentTile == 2) {
@@ -102,5 +63,53 @@ public class Game {
             System.out.println("You received damage: " + skeleton.getDamage());
             System.out.println("Remaining health: " + player.getHealth());
         }
+    }
+    private boolean playerAttack(){
+        if (isEnemyAdjacent() && skeleton.isAlive()) {
+            skeleton.takeDamage(20);
+            System.out.println("Skeleton remaining health: "  + skeleton.getHealth());
+            if (skeleton.getHealth() <= 0) {
+                System.out.println("You killed the skeleton!");
+            }
+            return true;
+        }
+        else if (!skeleton.isAlive()) {
+            System.out.println("Skeleton is dead");
+            return false;
+        }
+        else {
+            System.out.println("Skeleton too far away!");
+            return false;
+        }
+    }
+    private boolean movePlayer(int dx, int dy){
+        return player.move(dx,dy, gameMap,skeleton);
+    }
+    private boolean handleAction(String command){
+        switch (command) {
+            case "W":{
+                return movePlayer(0,-1);
+
+            }
+            case "S":{
+                return movePlayer(0,1);
+
+            }
+            case "D": {
+                return movePlayer(1,0);
+
+            }
+            case "A":{
+                return movePlayer(-1,0);
+            }
+            case "F": {
+                return playerAttack();
+            }
+            default: {
+                System.out.println("Invalid command");
+                return false;
+            }
+        }
+
     }
 }
