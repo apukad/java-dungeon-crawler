@@ -11,8 +11,6 @@ public class GameMap {
         if((y < 0) || (y >= map.length) || (x < 0) || (x >= map[y].length))
         {
             return false;
-        } else if (map[y][x] == 2 || map[y][x] ==3) {
-            return true;
         }
         return map[y][x] == 0;
     }

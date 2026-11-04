@@ -3,6 +3,7 @@ package org.example;
 import javax.swing.JPanel;
 import java.awt.Graphics;
 import java.awt.Color;
+import java.awt.Font;
 import javax.swing.AbstractAction;
 import javax.swing.JComponent;
 import javax.swing.KeyStroke;
@@ -45,6 +46,56 @@ public class GamePanel extends JPanel {
             );
         }
 
+        int uiX = 448;
+        int barWidth = 200;
+        int currentWidth = barWidth * player.getHealth() / 100;
+        int currentEnemyWidth = barWidth * enemy.getHealth() / 100;
+        g.setColor(Color.darkGray);
+        g.fillRect(uiX, 0, getWidth()-uiX, getHeight());
+
+        g.setColor(Color.white);
+        g.drawString("CONTROLS: ",  uiX + 20, 225);
+        g.drawString("WASD - MOVE", uiX + 20, 250);
+        g.drawString("E - INTERACT", uiX + 20, 275);
+        g.drawString("F - ATTACK",  uiX + 20, 300);
+        g.drawString("Q - QUIT",  uiX + 20, 325);
+        g.drawString("PLAYER", uiX + 20, 40);
+        g.drawString("HP "+ player.getHealth(), uiX + 20, 65);
+        g.setColor(Color.GRAY);
+        g.fillRect(uiX+20, 80, 200, 15);
+        g.setColor(Color.GREEN);
+        g.fillRect(uiX + 20, 80, currentWidth, 15);
+        if (game.isEnemyNearby()){
+            g.setColor(Color.white);
+            g.drawString("ENEMY", uiX + 20, 125);
+            g.drawString("HP "+ enemy.getHealth(), uiX + 20, 150);
+            g.setColor(Color.GRAY);
+            g.fillRect(uiX+20, 165, 200, 15);
+            g.setColor(Color.RED);
+            g.fillRect(uiX + 20, 165, currentEnemyWidth, 15);
+        }
+        if (game.hasWon()){
+            g.setColor(new Color(0, 0, 0, 220));
+            g.fillRect(0, 0, getWidth(), getHeight());
+            g.setColor(Color.WHITE);
+            g.setFont(new Font("Arial", Font.BOLD, 36));
+            String message = "YOU WIN!";
+            int textWidth = g.getFontMetrics().stringWidth(message);
+            int x = (getWidth() - textWidth) / 2;
+
+            g.drawString(message, x, 250);
+        }
+        else if (!player.isAlive()){
+            g.setColor(new Color(0, 0, 0, 220));
+            g.fillRect(0, 0, getWidth(), getHeight());
+            g.setColor(Color.WHITE);
+            g.setFont(new Font("Arial", Font.BOLD, 36));
+            String message = "YOU LOSE!";
+            int textWidth = g.getFontMetrics().stringWidth(message);
+            int x = (getWidth() - textWidth) / 2;
+
+            g.drawString(message, x, 250);
+        }
     }
     private GameMap gameMap;
 
@@ -52,10 +103,13 @@ public class GamePanel extends JPanel {
 
     private Enemy enemy;
 
-    public GamePanel(GameMap gameMap, Player player, Enemy enemy) {
+    private Game game;
+
+    public GamePanel(GameMap gameMap, Player player, Enemy enemy,Game game) {
         this.gameMap = gameMap;
         this.player = player;
         this.enemy = enemy;
+        this.game = game;
 
         setupKeyBindings();
     }
@@ -68,7 +122,7 @@ public class GamePanel extends JPanel {
         getActionMap().put("moveUp", new AbstractAction() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                player.move(0, -1, gameMap, enemy);
+                game.processTurn("W");
                 repaint();
             }
         });
@@ -78,7 +132,7 @@ public class GamePanel extends JPanel {
         getActionMap().put("moveDown", new AbstractAction() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                player.move(0, 1, gameMap, enemy);
+                game.processTurn("S");
                 repaint();
             }
         });
@@ -88,7 +142,7 @@ public class GamePanel extends JPanel {
         getActionMap().put("moveLeft", new AbstractAction() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                player.move(-1,0,gameMap,enemy);
+                game.processTurn("A");
                 repaint();
             }
         });
@@ -97,9 +151,28 @@ public class GamePanel extends JPanel {
         getActionMap().put("moveRight", new AbstractAction() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                player.move(1,0,gameMap,enemy);
+                game.processTurn("D");
                 repaint();
             }
         });
+        getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW)
+                .put(KeyStroke.getKeyStroke("pressed F"),"attack");
+        getActionMap().put("attack", new AbstractAction() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                game.processTurn("F");
+                repaint();
+            }
+        });
+        getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW)
+                .put(KeyStroke.getKeyStroke("pressed E"),"interact");
+        getActionMap().put("interact", new AbstractAction() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                game.processTurn("E");
+                repaint();
+            }
+        });
+
     }
 }
