@@ -26,5 +26,15 @@ public class Player extends GameCharacter {
         return hasKey;
     }
 
+    public void restoreKeyState(boolean hasKey){
+        this.hasKey = hasKey;
+    }
+
+    @Override
+    public int getAttackDamage() {
+        return 20;
+    }
+
+
 
 }

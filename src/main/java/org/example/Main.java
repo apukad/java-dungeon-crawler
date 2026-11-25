@@ -19,8 +19,5 @@ public class Main {
         Player player = new Player("Knight", 1, 2);
         Game game = new Game(player, gameMap, skeleton);
         game.start();
-
     }
-
-
 }

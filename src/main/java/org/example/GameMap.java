@@ -28,5 +28,13 @@ public class GameMap {
         map[y][x] = 0;
        }
     }
+    public void restoreKeyState(boolean hasKey){
+        if (hasKey){
+            removeKey(3,3);
+        }
+        else {
+            map[3][3] = 2;
+        }
+    }
 
 }

@@ -1,8 +1,7 @@
 package org.example;
 
-import jdk.jfr.Enabled;
 
-public class GameCharacter {
+public abstract class GameCharacter {
     private String name;
     private int health;
     private int x;
@@ -48,5 +47,11 @@ public class GameCharacter {
         this.x = x;
         this.y = y;
     }
+    public void restoreState(int health, int x, int y) {
+        this.health = Math.max(0, health);
+        setPosition(x, y);
+    }
+
+    public abstract int getAttackDamage();
 
 }

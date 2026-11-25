@@ -9,5 +9,11 @@ public class Enemy extends GameCharacter {
     public int getDamage() {
         return damage;
     }
+
+    @Override
+    public int getAttackDamage() {
+        return damage;
+    }
+
 }
 

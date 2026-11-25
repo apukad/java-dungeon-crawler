@@ -58,7 +58,9 @@ public class GamePanel extends JPanel {
         g.drawString("WASD - MOVE", uiX + 20, 250);
         g.drawString("E - INTERACT", uiX + 20, 275);
         g.drawString("F - ATTACK",  uiX + 20, 300);
-        g.drawString("Q - QUIT",  uiX + 20, 325);
+        g.drawString("P - SAVE",  uiX + 20, 325);
+        g.drawString("L - LOAD",  uiX + 20, 350);
+        g.drawString("Q - QUIT",  uiX + 20, 375);
         g.drawString("PLAYER", uiX + 20, 40);
         g.drawString("HP "+ player.getHealth(), uiX + 20, 65);
         g.setColor(Color.GRAY);
@@ -173,6 +175,30 @@ public class GamePanel extends JPanel {
                 repaint();
             }
         });
-
+        getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW)
+                .put(KeyStroke.getKeyStroke("pressed P"), "savegame");
+        getActionMap().put("savegame", new AbstractAction() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                game.saveGame();
+            }
+        });
+        getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW)
+                .put(KeyStroke.getKeyStroke("pressed L"), "loadgame");
+        getActionMap().put("loadgame", new AbstractAction() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                game.loadGame();
+                repaint();
+            }
+        });
+        getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW)
+                .put(KeyStroke.getKeyStroke("pressed Q"), "exit");
+        getActionMap().put("exit", new AbstractAction() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                System.exit(0);
+            }
+        });
     }
 }
